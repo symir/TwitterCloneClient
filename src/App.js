@@ -8,30 +8,31 @@ const App = () => {
   const [stateTweets,setTweets] = useState([]);
 
   useEffect (() => {
-    const GetAllTweets = async () => {
-      const response = await axios.get("localhost:44359/api/tweets")
+    const GetAllTweets = async () =>
+    {
+      const response = await axios.get("https://localhost:44359/api/tweets")
+      console.log("SetTweets")
       setTweets(response.data)
-      console.log(response)
     }
     GetAllTweets();
+    console.log("GETTWEETS")
     console.log(stateTweets)
   });
+
+  
   return (
     <div className="App">
       <header className="App-header">  
 
-      {stateTweets.map((item, index) => (
+      {stateTweets && stateTweets.map((item, index) => (
                 <Card
                   index={index}
-                  value={item.name}
-                  cost={item.cost}
+                  value={item.content}
+                  cost={item.userId}
                   id={item.id}
                   
                 />
               ))}
-
-
-
       </header>
     </div>
   );
