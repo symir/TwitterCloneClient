@@ -2,7 +2,8 @@ import './App.css';
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Card} from "./components"
+// import {Card} from "./components"
+import Card from "react-bootstrap/Card";
 
 const App = () => {
   const [stateTweets,setTweets] = useState([]);
@@ -25,13 +26,18 @@ const App = () => {
       <header className="App-header">  
 
       {stateTweets && stateTweets.map((item, index) => (
-                <Card
-                  index={index}
-                  value={item.content}
-                  cost={item.userId}
-                  id={item.id}
+                <Card 
+                  bg="light"
+                  border="dark"
+                  text="dark"
+                  key={index}
+                  style={{ width: '18rem' }}
+                >
+                  <Card.Body>
+                    <Card.Text>{item.content}</Card.Text>
+                  </Card.Body>
                   
-                />
+                </Card>
               ))}
       </header>
     </div>
