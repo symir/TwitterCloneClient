@@ -38,10 +38,35 @@ const App = () => {
                 key={index}
                 style={{ width: '18rem' }}
               >
+                
                 <Card.Body>
-                  <Card.Title>{item.user.userName}</Card.Title>
-                  <Card.Text>{item.content}</Card.Text>
+                    {item.retweetId ?
+                    <React.Fragment>
+                      <Card.Title>{item.user.userName} retweeted</Card.Title>
+                      <Card.Body> 
+                        <Card.Title>{item.referenceTweet.user.userName}</Card.Title>
+                        <Card.Text>{item.referenceTweet.content}</Card.Text>
+                        <Card.Text>Retweet!</Card.Text>
+                      </Card.Body>
+                      </React.Fragment>
+                    : (item.replyId ?
+                      <Card.Body>
+                        <Card.Title>{item.user.userName}</Card.Title>
+                        <Card.Text>{item.content}</Card.Text>
+                          <Card.Body>
+                            <Card.Title>{item.referenceTweet.user.userName}</Card.Title>
+                            <Card.Text>{item.referenceTweet.content}</Card.Text>
+                          </Card.Body>
+                      </Card.Body>
+                      :
+                      <Card.Body>
+                        <Card.Title>{item.user.userName}</Card.Title>
+                        <Card.Text>{item.content}</Card.Text>
+                      </Card.Body>
+                      )
+                    }
                 </Card.Body>
+                
                 
               </Card>
             ))}
