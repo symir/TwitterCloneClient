@@ -1,1 +1,1 @@
-export { Card } from "./Card";
+export { Tweet } from "./Tweet";
