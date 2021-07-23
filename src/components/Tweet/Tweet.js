@@ -16,22 +16,45 @@ const Tweet = (props) => {
           <Card.Body>
             <Card.Title>{props.item.referenceTweet.user.userName}</Card.Title>
             <Card.Text>{props.item.referenceTweet.content}</Card.Text>
-            <Card.Text>Retweet!</Card.Text>
+            <Card.Text>
+              Likes: {props.item.referenceTweet.likeCounter}
+            </Card.Text>
+            <Card.Text>
+              Retweets: {props.item.referenceTweet.retweetCounter}
+            </Card.Text>
+            <Card.Text>
+              Replies: {props.item.referenceTweet.replyCounter}
+            </Card.Text>
           </Card.Body>
         </Card.Body>
       ) : props.item.replyId ? (
         <Card.Body>
           <Card.Title>{props.item.user.userName}</Card.Title>
           <Card.Text>{props.item.content}</Card.Text>
+          <Card.Text>Likes: {props.item.likeCounter}</Card.Text>
+          <Card.Text>Retweets: {props.item.retweetCounter}</Card.Text>
+          <Card.Text>Replies: {props.item.replyCounter}</Card.Text>
           <Card.Body>
             <Card.Title>{props.item.referenceTweet.user.userName}</Card.Title>
             <Card.Text>{props.item.referenceTweet.content}</Card.Text>
+            <Card.Text>
+              Likes: {props.item.referenceTweet.likeCounter}
+            </Card.Text>
+            <Card.Text>
+              Retweets: {props.item.referenceTweet.retweetCounter}
+            </Card.Text>
+            <Card.Text>
+              Replies: {props.item.referenceTweet.replyCounter}
+            </Card.Text>
           </Card.Body>
         </Card.Body>
       ) : (
         <Card.Body>
           <Card.Title>{props.item.user.userName}</Card.Title>
           <Card.Text>{props.item.content}</Card.Text>
+          <Card.Text>Likes: {props.item.likeCounter}</Card.Text>
+          <Card.Text>Retweets: {props.item.retweetCounter}</Card.Text>
+          <Card.Text>Replies: {props.item.replyCounter}</Card.Text>
         </Card.Body>
       )}
     </Card>
