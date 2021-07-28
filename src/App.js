@@ -14,7 +14,7 @@ const App = () => {
     const GetAllTweets = async () =>
     {
       const response = await axios.get("https://localhost:44359/api/tweets")
-      console.log("SetTweets")
+      //console.log("SetTweets")
       setTweets(response.data)
     } 
     GetAllTweets();
@@ -25,21 +25,27 @@ const App = () => {
   const handleSubmit = async event =>
   {
     event.preventDefault();
-    const User = "1";
+
+    const User = 1;
     const postObject = {
-      userId : User,
-      content : statePost
+      "UserId" : User,
+      "Content" : statePost,
     }
 
     const PostTweet = async () => 
     {
-      await axios.post("https://localhost:44359/api/tweets/", {postObject})
+      await axios.post("https://localhost:44359/api/tweets/post", postObject, { headers: {
+        Accept: 'application/json',
+       'Content-Type': 'application/json'
+      }})
         .then(res => {
           console.log(res);
           console.log(res.data);
         })
     }
+    console.log(postObject)
     PostTweet();
+    setPost("")
   }
 
   const handleChange = event => 
@@ -47,16 +53,30 @@ const App = () => {
     setPost(event.target.value);
   }
 
+  const handleLike = async (id) => 
+  {
+    const LikeString = "https://localhost:44359/api/tweets/like/"+id;
+    const LikeTweet = async () =>
+    {
+      await axios.put(LikeString)
+      .then(res => {
+        console.log(res);
+        console.log(res.data);
+      })
+    }
+    console.log(LikeString);
+    LikeTweet();
+  }
   
   return (
     <div className="App">
       <header className="App-header">  
-      <Container fluid>
+      <Container>
         <Row>
-          <Col>
+          <Col md="auto">
             <Menu />
           </Col>
-          <Col>
+          <Col md="auto">
             <Post 
               onChange={handleChange}
               onSubmit={handleSubmit}
@@ -64,12 +84,14 @@ const App = () => {
             {stateTweets && stateTweets.map((item) => (
               <Row key={item.tweetId}>
                 <Tweet 
+                  onLike={handleLike}
+                  id={item.tweetId}
                   item={item}
                 />
               </Row>
             ))}
           </Col>
-          <Col>
+          <Col md="auto">
             <Search />
             <Trends />
           </Col>

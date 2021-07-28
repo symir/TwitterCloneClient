@@ -1,9 +1,9 @@
 import React from "react";
-import Card from "react-bootstrap/Card";
+import { Card, Row, Col, Button } from "react-bootstrap";
 
 const Tweet = (props) => {
   return (
-    <Card bg="light" border="dark" text="dark" style={{ width: "18rem" }}>
+    <Card bg="light" border="dark" text="dark" style={{ width: "24rem" }}>
       {props.item.retweetId ? (
         <Card.Body>
           <Card.Title>{props.item.user.userName} retweeted</Card.Title>
@@ -46,9 +46,19 @@ const Tweet = (props) => {
         <Card.Body>
           <Card.Title>{props.item.user.userName}</Card.Title>
           <Card.Text>{props.item.content}</Card.Text>
-          <Card.Text>Likes: {props.item.likeCounter}</Card.Text>
-          <Card.Text>Retweets: {props.item.retweetCounter}</Card.Text>
-          <Card.Text>Replies: {props.item.replyCounter}</Card.Text>
+          <Row>
+            <Col md="auto">
+              <Button onClick={() => props.onLike(props.id)}>
+                Likes: {props.item.likeCounter}
+              </Button>
+            </Col>
+            <Col md="auto">
+              <Card.Text>Retweets: {props.item.retweetCounter}</Card.Text>
+            </Col>
+            <Col md="auto">
+              <Card.Text>Replies: {props.item.replyCounter}</Card.Text>
+            </Col>
+          </Row>
         </Card.Body>
       )}
     </Card>
