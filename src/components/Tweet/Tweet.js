@@ -3,13 +3,7 @@ import Card from "react-bootstrap/Card";
 
 const Tweet = (props) => {
   return (
-    <Card
-      bg="light"
-      border="dark"
-      text="dark"
-      key={props.index}
-      style={{ width: "18rem" }}
-    >
+    <Card bg="light" border="dark" text="dark" style={{ width: "18rem" }}>
       {props.item.retweetId ? (
         <Card.Body>
           <Card.Title>{props.item.user.userName} retweeted</Card.Title>

@@ -2,12 +2,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Tweet, Menu } from "./components";
+import { Tweet, Menu, Search, Trends, Post } from "./components";
 
 import { Container, Col, Row } from "react-bootstrap";
 
 const App = () => {
   const [stateTweets,setTweets] = useState([]);
+  const [statePost,setPost] = useState();
 
   useEffect (() => {
     const GetAllTweets = async () =>
@@ -17,9 +18,34 @@ const App = () => {
       setTweets(response.data)
     } 
     GetAllTweets();
-    console.log("GETTWEETS")
-    console.log(stateTweets)
+    // console.log("GETTWEETS")
+    // console.log(stateTweets)
   });
+
+  const handleSubmit = async event =>
+  {
+    event.preventDefault();
+    const User = "1";
+    const postObject = {
+      userId : User,
+      content : statePost
+    }
+
+    const PostTweet = async () => 
+    {
+      await axios.post("https://localhost:44359/api/tweets/", {postObject})
+        .then(res => {
+          console.log(res);
+          console.log(res.data);
+        })
+    }
+    PostTweet();
+  }
+
+  const handleChange = event => 
+  {
+    setPost(event.target.value);
+  }
 
   
   return (
@@ -31,17 +57,22 @@ const App = () => {
             <Menu />
           </Col>
           <Col>
-            {stateTweets && stateTweets.map((item, index) => (
-              <Row>
+            <Post 
+              onChange={handleChange}
+              onSubmit={handleSubmit}
+            />
+            {stateTweets && stateTweets.map((item) => (
+              <Row key={item.tweetId}>
                 <Tweet 
-                  index={index}
                   item={item}
                 />
               </Row>
             ))}
           </Col>
           <Col>
-          Whoo!</Col>
+            <Search />
+            <Trends />
+          </Col>
         </Row>
       </Container>
       </header>
