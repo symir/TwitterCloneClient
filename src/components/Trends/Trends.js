@@ -4,7 +4,7 @@ import { Container, Card } from "react-bootstrap";
 const Trends = (props) => {
   return (
     <Container>
-      <Card>
+      <Card style={{ marginTop: "1rem" }}>
         <Card.Body>
           <Card.Subtitle>Trending in $yourLocation</Card.Subtitle>
           <Card.Title>Trend #1</Card.Title>
