@@ -2,13 +2,20 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Tweet, Menu, Search, Trends, Post } from "./components";
+import { Tweet, Menu, Search, Trends, Post, ReplyPost } from "./components";
 
 import { Container, Col, Row } from "react-bootstrap";
 
 const App = () => {
   const [stateTweets,setTweets] = useState([]);
   const [statePost,setPost] = useState();
+
+  const [stateReply,setReply] = useState();
+  const [stateReplyId,setReplyId] = useState();
+  const [stateShowReply,setShowReply] = useState(false);
+  const [stateReferencedTweet, setReferencedTweet] = useState({"content":"","user":{"username":""}});
+
+  const [stateUser,setUser] = useState(1);
 
   useEffect (() => {
     const GetAllTweets = async () =>
@@ -22,13 +29,12 @@ const App = () => {
     // console.log(stateTweets)
   });
 
-  const handleSubmit = async event =>
+  const handlePostSubmit = async event =>
   {
     event.preventDefault();
 
-    const User = 1;
     const postObject = {
-      "UserId" : User,
+      "UserId" : stateUser,
       "Content" : statePost,
     }
 
@@ -48,7 +54,7 @@ const App = () => {
     setPost("")
   }
 
-  const handleChange = event => 
+  const handlePostChange = event => 
   {
     setPost(event.target.value);
   }
@@ -67,10 +73,69 @@ const App = () => {
     console.log(LikeString);
     LikeTweet();
   }
+
+
+  const handleCloseReply = () => {
+    setShowReply(false);
+    setReplyId("");
+  }
+  const handleShowReply = (id) => {
+    setReplyId(id);
+    setShowReply(true);
+    console.log("replyId: "+id);
+    setReferencedTweet(stateTweets.find(tweet => tweet.tweetId === id))
+
+  }
+
+  const handleRetweet = async (id) =>
+  {
+
+  }
+
+  const handleReplySubmit = async event =>
+  {
+    event.preventDefault();
+
+    const replyObject = {
+      "UserId" : stateUser,
+      "Content" : stateReply,
+      "ReplyId" : stateReplyId
+    }
+
+    const ReplyTweet = async () => 
+    {
+      await axios.post("https://localhost:44359/api/tweets/post", replyObject, { headers: {
+        Accept: 'application/json',
+       'Content-Type': 'application/json'
+      }})
+        .then(res => {
+          console.log(res);
+          console.log(res.data);
+        })
+    }
+    console.log(replyObject)
+    ReplyTweet();
+    setReply("")
+    handleCloseReply()
+  }
+
+  const handleReplyChange = async event => 
+  {
+    setReply(event.target.value);
+  }
   
   return (
     <div className="App">
       <header className="App-header">  
+      <ReplyPost 
+        show={stateShowReply} 
+        handleClose={handleCloseReply} 
+        onSubmit={handleReplySubmit}
+        onChange={handleReplyChange} 
+        id={stateReplyId}
+        itemContent={stateReferencedTweet.content}
+        itemUser={stateReferencedTweet.user.userName}
+      />
       <Container>
         <Row>
           <Col md="auto">
@@ -78,13 +143,15 @@ const App = () => {
           </Col>
           <Col md="auto">
             <Post 
-              onChange={handleChange}
-              onSubmit={handleSubmit}
+              onChange={handlePostChange}
+              onSubmit={handlePostSubmit}
             />
             {stateTweets && stateTweets.map((item) => (
               <Row key={item.tweetId}>
                 <Tweet 
                   onLike={handleLike}
+                  onRetweet={handleRetweet}
+                  onShowReply={handleShowReply}
                   id={item.tweetId}
                   item={item}
                 />

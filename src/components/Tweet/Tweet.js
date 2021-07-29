@@ -1,10 +1,10 @@
 import React from "react";
-import { Card, Row, Col, Button } from "react-bootstrap";
+import { Card, Row, Col, Button, ButtonGroup } from "react-bootstrap";
 
 const Tweet = (props) => {
   return (
     <Card bg="light" border="dark" text="dark" style={{ width: "24rem" }}>
-      {props.item.retweetId ? (
+      {props.item.retweetId ? ( // Tweets that are retweets
         <Card.Body>
           <Card.Title>{props.item.user.userName} retweeted</Card.Title>
           <Card.Body>
@@ -21,7 +21,7 @@ const Tweet = (props) => {
             </Card.Text>
           </Card.Body>
         </Card.Body>
-      ) : props.item.replyId ? (
+      ) : props.item.replyId ? ( // Tweets that are replies
         <Card.Body>
           <Card.Title>{props.item.user.userName}</Card.Title>
           <Card.Text>{props.item.content}</Card.Text>
@@ -43,22 +43,30 @@ const Tweet = (props) => {
           </Card.Body>
         </Card.Body>
       ) : (
+        // Regular ol' tweets
         <Card.Body>
           <Card.Title>{props.item.user.userName}</Card.Title>
           <Card.Text>{props.item.content}</Card.Text>
-          <Row>
-            <Col md="auto">
-              <Button onClick={() => props.onLike(props.id)}>
-                Likes: {props.item.likeCounter}
-              </Button>
-            </Col>
-            <Col md="auto">
-              <Card.Text>Retweets: {props.item.retweetCounter}</Card.Text>
-            </Col>
-            <Col md="auto">
-              <Card.Text>Replies: {props.item.replyCounter}</Card.Text>
-            </Col>
-          </Row>
+          <ButtonGroup>
+            <Button
+              variant="outline-primary"
+              onClick={() => props.onLike(props.id)}
+            >
+              Likes: {props.item.likeCounter}
+            </Button>
+            <Button
+              variant="outline-primary"
+              onClick={() => props.onRetweet(props.id)}
+            >
+              Retweets: {props.item.retweetCounter}
+            </Button>
+            <Button
+              variant="outline-primary"
+              onClick={() => props.onShowReply(props.id)}
+            >
+              Replies: {props.item.replyCounter}
+            </Button>
+          </ButtonGroup>
         </Card.Body>
       )}
     </Card>
