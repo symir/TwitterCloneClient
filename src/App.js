@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Tweet, Menu, Search, Trends, Post, ReplyPost, RetweetPost } from "./components";
+import { Tweet, Menu, Search, Trends, Post, ReplyPost, RetweetPost, TweetFocus } from "./components";
 
 import { Container, Col, Row} from "react-bootstrap";
 
@@ -14,20 +14,58 @@ const App = () => {
   const [stateReferenceId,setReferenceId] = useState();
   const [stateShowReply,setShowReply] = useState(false);
   const [stateShowRetweet,setShowRetweet] = useState(false);
-  const [stateReferencedTweet, setReferencedTweet] = useState({"content":"","user":{"username":""}});
+  const [stateShowFocus,setShowFocus] = useState(false);
+  const [stateReferencedTweet, setReferencedTweet] = useState({
+    "content":"",
+    "user":{
+      "username":"",
+      "alias":"",
+      "avatar":""}
+  });
 
-  const [stateUser,setUser] = useState(1);
+  const [stateFocusId,setFocusId] = useState();
+
+  const [stateFocusTweet,setFocusTweet] = useState({
+      "content":"",
+      "user":{
+        "username":"",
+        "alias":"",
+        "avatar":""}
+    });
+  const [stateFocusReferencedTweet,setFocusReferencedTweet] = useState([{
+      "content":"",
+      "user":{
+        "username":"",
+        "alias":"",
+        "avatar":""}
+    }]);
+
+  const [stateUsers,setUsers] = useState([]);
+  const [stateActiveUser,setActiveUser] = useState(1);
+
+useEffect(()=> {
+  if(stateFocusId){
+  const childTweets = [];
+  const tweet = (stateTweets.find(tweet => tweet.tweetId === stateFocusId));
+
+    for (const item of stateTweets){
+      if(item.replyId === stateFocusId || item.retweetId === stateFocusId ){
+        childTweets.push(item);
+      }
+    };
+
+    if(childTweets.length > 0){setFocusReferencedTweet(childTweets)};
+    setFocusTweet(tweet);
+  }
+})
 
   useEffect (() => {
     const GetAllTweets = async () =>
     {
       const response = await axios.get("https://localhost:44359/api/tweets")
-      //console.log("SetTweets")
       setTweets(response.data)
     } 
     GetAllTweets();
-    // console.log("GETTWEETS")
-    // console.log(stateTweets)
   });
 
   const handlePostSubmit = async event =>
@@ -35,7 +73,7 @@ const App = () => {
     event.preventDefault();
 
     const postObject = {
-      "UserId" : stateUser,
+      "UserId" : stateActiveUser,
       "Content" : statePost,
     }
 
@@ -102,9 +140,10 @@ const App = () => {
   const handleReplySubmit = async event =>
   {
     event.preventDefault();
+    event.stopPropagation();
 
     const replyObject = {
-      "UserId" : stateUser,
+      "UserId" : stateActiveUser,
       "Content" : stateReply,
       "ReplyId" : stateReferenceId
     }
@@ -134,7 +173,7 @@ const App = () => {
   const handleRetweetSubmit = async event => 
   {
     const retweetObject = {
-      "UserId" : stateUser,
+      "UserId" : stateActiveUser,
       "RetweetId" : stateReferenceId
     }
 
@@ -152,6 +191,29 @@ const App = () => {
     Retweet();
     handleCloseRetweet();
   }
+
+  const handleFocusCardClick = (id) => 
+  {
+    handleShowFocus(id);
+  }
+
+  const handleFocusCardChildClick = (id, event) => {
+    event.stopPropagation();
+    handleShowFocus(id);
+  }
+/*
+  const handleShowFocus = (id) => {
+    setFocusId(id);
+    console.log("parent id: "+id);
+
+    setShowFocus(true);
+  }
+
+  const handleCloseFocus = () =>
+  {
+    setShowFocus(false);
+    setFocusId("");
+  }*/
   
   return (
     <div className="App">
@@ -177,16 +239,21 @@ const App = () => {
             <Menu />
           </Col>
           <Col md="auto">
+            <Row>
             <Post 
               onChange={handlePostChange}
               onSubmit={handlePostSubmit}
-            />
+              users={stateUsers}
+              activeUser={stateActiveUser}
+            /></Row>
             {stateTweets && stateTweets.map((item) => (
               <Row key={item.tweetId}>
                 <Tweet 
                   onLike={handleLike}
                   onRetweet={handleShowRetweet}
                   onShowReply={handleShowReply}
+                  onCardClick={handleFocusCardClick}
+                  onCardChildClick={handleFocusCardChildClick}
                   id={item.tweetId}
                   item={item}
                 />

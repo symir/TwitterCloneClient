@@ -2,7 +2,6 @@ import React from "react";
 import {
   Container,
   Row,
-  Col,
   Card,
   Button,
   ButtonGroup,
@@ -46,7 +45,7 @@ const ReplyPost = (props) => {
                   as="textarea"
                   rows={3}
                   placeholder="What's on your mind?"
-                  maxlength="280"
+                  maxLength="280"
                   style={{
                     resize: "none",
                     width: "24rem",

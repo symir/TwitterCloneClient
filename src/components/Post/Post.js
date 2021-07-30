@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Row, Form, Button } from "react-bootstrap";
+import { Container, Row, Col, Form, Button, Dropdown } from "react-bootstrap";
 
 const Post = (props) => {
   return (
@@ -16,7 +16,7 @@ const Post = (props) => {
               rows={6}
               placeholder="What's on your mind?"
               style={{ resize: "none", width: "24rem" }}
-              maxlength="280"
+              maxLength="280"
             />
           </Form.Group>
         </Row>

@@ -5,6 +5,7 @@ export { Post } from "./Post";
 export { ReplyPost } from "./ReplyPost";
 export { RetweetPost } from "./RetweetPost";
 export { Menu } from "./Menu";
+export { TweetFocus } from "./TweetFocus";
 
 export { Search } from "./Search";
 // export { FollowTopic } from "./FollowTopic";
