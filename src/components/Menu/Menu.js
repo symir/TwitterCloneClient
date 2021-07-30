@@ -5,7 +5,9 @@ const Menu = (props) => {
   return (
     <Container>
       <ButtonGroup vertical style={{ marginTop: "1rem" }}>
-        <Button variant="outline-primary">Home</Button>
+        <Button href="/" variant="outline-primary">
+          Home
+        </Button>
         <Button variant="outline-primary">Explore</Button>
         <Button variant="outline-primary">Notifications</Button>
         <Button variant="outline-primary">Messages</Button>

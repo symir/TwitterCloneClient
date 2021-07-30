@@ -2,9 +2,24 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Tweet, Menu, Search, Trends, Post, ReplyPost, RetweetPost, TweetFocus } from "./components";
+import { 
+  Tweet, 
+  Menu, 
+  Search, 
+  Trends, 
+  Post, 
+  ReplyPost, 
+  RetweetPost
+} from "./components";
 
-import { Container, Col, Row} from "react-bootstrap";
+import { Container, Col, Row, Card} from "react-bootstrap";
+
+import {
+  BrowserRouter as Router,
+  Route,
+  BrowserRouter,
+  useHistory
+} from "react-router-dom";
 
 const App = () => {
   const [stateTweets,setTweets] = useState([]);
@@ -14,7 +29,6 @@ const App = () => {
   const [stateReferenceId,setReferenceId] = useState();
   const [stateShowReply,setShowReply] = useState(false);
   const [stateShowRetweet,setShowRetweet] = useState(false);
-  const [stateShowFocus,setShowFocus] = useState(false);
   const [stateReferencedTweet, setReferencedTweet] = useState({
     "content":"",
     "user":{
@@ -42,7 +56,7 @@ const App = () => {
 
   const [stateUsers,setUsers] = useState([]);
   const [stateActiveUser,setActiveUser] = useState(1);
-
+/*
 useEffect(()=> {
   if(stateFocusId){
   const childTweets = [];
@@ -57,7 +71,7 @@ useEffect(()=> {
     if(childTweets.length > 0){setFocusReferencedTweet(childTweets)};
     setFocusTweet(tweet);
   }
-})
+})*/
 
   useEffect (() => {
     const GetAllTweets = async () =>
@@ -67,6 +81,7 @@ useEffect(()=> {
     } 
     GetAllTweets();
   });
+
 
   const handlePostSubmit = async event =>
   {
@@ -98,8 +113,10 @@ useEffect(()=> {
     setPost(event.target.value);
   }
 
-  const handleLike = async (id) => 
+  const handleLike = async (id, event) => 
   {
+    event.stopPropagation();
+    event.nativeEvent.stopImmediatePropagation();
     const LikeString = "https://localhost:44359/api/tweets/like/"+id;
     const LikeTweet = async () =>
     {
@@ -118,7 +135,9 @@ useEffect(()=> {
     setShowReply(false);
     setReferenceId("");
   }
-  const handleShowReply = (id) => {
+  const handleShowReply = (id, event) => {
+    event.stopPropagation();
+    event.nativeEvent.stopImmediatePropagation();
     setReferenceId(id);
     setShowReply(true);
     console.log("replyId: "+id);
@@ -131,13 +150,15 @@ useEffect(()=> {
     setShowRetweet(false)
     setReferenceId("")
   }
-  const handleShowRetweet = async (id) =>
+  const handleShowRetweet = (id, event) =>
   {
+    event.stopPropagation();
+    event.nativeEvent.stopImmediatePropagation();
     setReferenceId(id);
     setShowRetweet(true);
   }
 
-  const handleReplySubmit = async event =>
+  const handleReplySubmit = (event) =>
   {
     event.preventDefault();
     event.stopPropagation();
@@ -192,15 +213,21 @@ useEffect(()=> {
     handleCloseRetweet();
   }
 
+  const history = useHistory();
+
   const handleFocusCardClick = (id) => 
   {
-    handleShowFocus(id);
+    history.push("/48")
+    // handleShowFocus(id);
+    console.log("Card click: "+id)
   }
 
   const handleFocusCardChildClick = (id, event) => {
     event.stopPropagation();
-    handleShowFocus(id);
+    console.log("Card click: "+id)
+    // handleShowFocus(id);
   }
+
 /*
   const handleShowFocus = (id) => {
     setFocusId(id);
@@ -214,60 +241,132 @@ useEffect(()=> {
     setShowFocus(false);
     setFocusId("");
   }*/
-  
+
   return (
-    <div className="App">
-      <header className="App-header">  
-      <ReplyPost 
-        show={stateShowReply} 
-        handleClose={handleCloseReply} 
-        onSubmit={handleReplySubmit}
-        onChange={handleReplyChange} 
-        id={stateReferenceId}
-        itemContent={stateReferencedTweet.content}
-        itemUser={stateReferencedTweet.user.userName}
-      />
-      <RetweetPost 
-        show={stateShowRetweet}
-        handleClose={handleCloseRetweet}
-        onSubmit={handleRetweetSubmit}
-        id={stateReferenceId}
+    <BrowserRouter>
+      <div className="App">
+        <header className="App-header">  
+        <ReplyPost 
+          show={stateShowReply} 
+          handleClose={handleCloseReply} 
+          onSubmit={handleReplySubmit}
+          onChange={handleReplyChange} 
+          id={stateReferenceId}
+          itemContent={stateReferencedTweet.content}
+          itemUser={stateReferencedTweet.user.userName}
         />
-      <Container>
-        <Row>
-          <Col md="auto">
-            <Menu />
-          </Col>
-          <Col md="auto">
+        <RetweetPost 
+          show={stateShowRetweet}
+          handleClose={handleCloseRetweet}
+          onSubmit={handleRetweetSubmit}
+          id={stateReferenceId}
+          />
+          <Container>
             <Row>
-            <Post 
-              onChange={handlePostChange}
-              onSubmit={handlePostSubmit}
-              users={stateUsers}
-              activeUser={stateActiveUser}
-            /></Row>
-            {stateTweets && stateTweets.map((item) => (
-              <Row key={item.tweetId}>
-                <Tweet 
-                  onLike={handleLike}
-                  onRetweet={handleShowRetweet}
-                  onShowReply={handleShowReply}
-                  onCardClick={handleFocusCardClick}
-                  onCardChildClick={handleFocusCardChildClick}
-                  id={item.tweetId}
-                  item={item}
-                />
-              </Row>
-            ))}
-          </Col>
-          <Col md="auto">
-            <Search />
-            <Trends />
-          </Col>
-        </Row>
-      </Container>
-      </header>
-    </div>
+              <Col md="auto">
+                <Menu />
+              </Col>
+              <Col md="auto">
+                <Row>
+                  <Post 
+                    onChange={handlePostChange}
+                    onSubmit={handlePostSubmit}
+                    users={stateUsers}
+                    activeUser={stateActiveUser}
+                  />
+                </Row>
+                    <Route path="/" exact render={() => 
+                      <>
+                        {stateTweets && stateTweets.map((item) => (
+                          <Row key={item.tweetId} 
+                          style={{ marginTop: "1rem" }}>
+                            <Tweet 
+                              noChild={false}
+                              onLike={handleLike}
+                              onRetweet={handleShowRetweet}
+                              onShowReply={handleShowReply}
+                              onCardClick={handleFocusCardClick}
+                              onCardChildClick={handleFocusCardChildClick}
+                              id={item.tweetId}
+                              item={item}
+                            />
+                          </Row>
+                        ))}</>
+                      }/>
+                      <Route path={"/:tweetIdRoute"} render={(routeProps) => 
+                      <>
+                      <Card style={{ marginTop: "2rem" }}>
+                          {stateTweets.length > 0 && 
+                          <Card.Title><Row 
+                          key={parseInt(routeProps.match.params.tweetIdRoute)}
+                          style={{ marginTop: "-1rem" }}
+                          >
+                            <Tweet 
+                              noChild={false}
+                              onLike={handleLike}
+                              onRetweet={handleShowRetweet}
+                              onShowReply={handleShowReply}
+                              onCardClick={handleFocusCardClick}
+                              onCardChildClick={handleFocusCardChildClick}
+                              id={parseInt(routeProps.match.params.tweetIdRoute)}
+                              item={stateTweets.find(tweet => tweet.tweetId === parseInt(routeProps.match.params.tweetIdRoute))}
+                            />
+                          </Row>
+                          </Card.Title>}
+                          <Card.Body>
+                          <Container>
+                            {stateTweets.length > 0 && (
+                              !stateTweets.find(tweet => tweet.tweetId === parseInt(routeProps.match.params.tweetIdRoute)).replyId && 
+                              !stateTweets.find(tweet => tweet.tweetId === parseInt(routeProps.match.params.tweetIdRoute)).retweetId
+                              ) ?
+                            <Card.Subtitle style={{ marginBottom: "1rem" }}>
+                              Replying to @{stateTweets.find(tweet => tweet.tweetId === parseInt(routeProps.match.params.tweetIdRoute)).user.userName}: 
+                            </Card.Subtitle>
+                            :<></>}
+                            {stateTweets.length > 0 && stateTweets.filter(i=> i.replyId === parseInt(routeProps.match.params.tweetIdRoute)).map((item)=>(
+                              <Row key={item.tweetId} style={{ marginTop: "1rem" }}>
+                                <Tweet 
+                                  noChild={true}
+                                  refUser={stateTweets.find(tweet => tweet.tweetId === parseInt(routeProps.match.params.tweetIdRoute)).user}
+                                  onLike={handleLike}
+                                  onRetweet={handleShowRetweet}
+                                  onShowReply={handleShowReply}
+                                  onCardClick={handleFocusCardClick}
+                                  onCardChildClick={handleFocusCardChildClick}
+                                  id={item.tweetId}
+                                  item={item}
+                                />
+                              </Row>
+                          ))}
+                          </Container>
+                          </Card.Body>
+                          </Card>
+                          {/* 
+                        {stateTweets && stateTweets.map((item) => (
+                          <Row key={item.tweetId}>
+                            <Tweet 
+                              noChild="true"
+                              onLike={handleLike}
+                              onRetweet={handleShowRetweet}
+                              onShowReply={handleShowReply}
+                              onCardClick={handleFocusCardClick}
+                              onCardChildClick={handleFocusCardChildClick}
+                              id={item.tweetId}
+                              item={item}
+                            />
+                          </Row>
+                        ))}*/}</>
+                      }/>
+                </Col>
+              <Col md="auto">
+                <Search />
+                <Trends />
+              </Col>
+            </Row>
+          </Container>
+        </header>
+      </div>
+    </BrowserRouter>
   );
 }
 
