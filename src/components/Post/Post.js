@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Row, Col, Form, Button, Dropdown } from "react-bootstrap";
+import { Container, Row, Form, Button } from "react-bootstrap";
 
 const Post = (props) => {
   return (

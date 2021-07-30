@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, ButtonGroup, Container, Nav } from "react-bootstrap";
+import { Button, ButtonGroup, Container } from "react-bootstrap";
 
 const Menu = (props) => {
   return (

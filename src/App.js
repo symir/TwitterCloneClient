@@ -37,41 +37,9 @@ const App = () => {
       "avatar":""}
   });
 
-  const [stateFocusId,setFocusId] = useState();
-
-  const [stateFocusTweet,setFocusTweet] = useState({
-      "content":"",
-      "user":{
-        "username":"",
-        "alias":"",
-        "avatar":""}
-    });
-  const [stateFocusReferencedTweet,setFocusReferencedTweet] = useState([{
-      "content":"",
-      "user":{
-        "username":"",
-        "alias":"",
-        "avatar":""}
-    }]);
-
   const [stateUsers,setUsers] = useState([]);
   const [stateActiveUser,setActiveUser] = useState(1);
-/*
-useEffect(()=> {
-  if(stateFocusId){
-  const childTweets = [];
-  const tweet = (stateTweets.find(tweet => tweet.tweetId === stateFocusId));
 
-    for (const item of stateTweets){
-      if(item.replyId === stateFocusId || item.retweetId === stateFocusId ){
-        childTweets.push(item);
-      }
-    };
-
-    if(childTweets.length > 0){setFocusReferencedTweet(childTweets)};
-    setFocusTweet(tweet);
-  }
-})*/
 
   useEffect (() => {
     const GetAllTweets = async () =>
