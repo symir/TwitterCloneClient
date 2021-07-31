@@ -1,22 +1,37 @@
 import React from "react";
-import { Button, ButtonGroup, Container } from "react-bootstrap";
+import { Nav, Navbar } from "react-bootstrap";
 
 const Menu = (props) => {
   return (
-    <Container>
-      <ButtonGroup vertical style={{ marginTop: "1rem" }}>
-        <Button href="/" variant="outline-primary">
-          Home
-        </Button>
-        <Button variant="outline-primary">Explore</Button>
-        <Button variant="outline-primary">Notifications</Button>
-        <Button variant="outline-primary">Messages</Button>
-        <Button variant="outline-primary">Bookmarks</Button>
-        <Button variant="outline-primary">Lists</Button>
-        <Button variant="outline-primary">Profile</Button>
-        <Button variant="outline-primary">More</Button>
-      </ButtonGroup>
-    </Container>
+    <Navbar expand="lg">
+      <Navbar.Toggle aria-controls="basic-navbar-nav" />
+      <Navbar.Collapse>
+        <Nav className="mr-auto flex-column">
+          <Nav.Link href="/">Home</Nav.Link>
+          <Nav.Item>
+            <Nav.Link>Explore</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link>Notifications</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link>Messages</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link>Bookmarks</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link>Lists</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link>Profile</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link>More</Nav.Link>
+          </Nav.Item>
+        </Nav>
+      </Navbar.Collapse>
+    </Navbar>
   );
 };
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Row, Form, Button } from "react-bootstrap";
+import { Container, Row, Col, Form, Button } from "react-bootstrap";
 
 const Post = (props) => {
   return (
@@ -21,9 +21,12 @@ const Post = (props) => {
           </Form.Group>
         </Row>
         <Row>
-          <Button variant="primary" type="submit">
-            Submit
-          </Button>
+          <Col />
+          <Col sm="auto">
+            <Button variant="primary" type="submit">
+              Submit
+            </Button>
+          </Col>
         </Row>
       </Form>
     </Container>

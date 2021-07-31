@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Row, Col, Button, ButtonGroup, Image } from "react-bootstrap";
+import { Card, Button, ButtonGroup, Image } from "react-bootstrap";
 import AvatarFemale from "./../../img/avatar-female.png";
 import AvatarMale from "./../../img/avatar-male.png";
 import AvatarNeutral from "./../../img/avatar-default.png";
@@ -8,26 +8,26 @@ import { useHistory } from "react-router-dom";
 const User = (props) => {
   return (
     <Card.Header>
-      <Row>
-        <Col md="auto">
-          {props.user.avatar === 1 && <Image src={AvatarFemale} fluid />}
-          {props.user.avatar === 2 && <Image src={AvatarMale} fluid />}
-          {props.user.avatar === 3 && <Image src={AvatarNeutral} fluid />}
-        </Col>
-        <Col md="6" className="d-flex align-items-center">
-          <Card.Subtitle>
-            {props.user.alias} (@{props.user.userName}){" "}
-            {props.retweet && <> retweeted</>}
-            {props.reply && <> replied</>}
-          </Card.Subtitle>
-        </Col>
-      </Row>
+      {props.user.avatar === 1 && (
+        <Image src={AvatarFemale} style={{ float: "left" }} />
+      )}
+      {props.user.avatar === 2 && (
+        <Image src={AvatarMale} style={{ float: "left" }} />
+      )}
+      {props.user.avatar === 3 && (
+        <Image src={AvatarNeutral} style={{ float: "left" }} />
+      )}
+      <Card.Subtitle
+        className="d-flex justify-content-center"
+        style={{ marginTop: "1rem" }}
+      >
+        {props.user.alias} (@{props.user.userName}){" "}
+        {props.retweet && <> retweeted</>}
+        {props.reply && <> replied</>}
+      </Card.Subtitle>
     </Card.Header>
   );
 };
-
-// () => props.onCardClick(props.id)
-// (event) => props.onCardChildClick(props.item.retweetId, event)
 
 const Tweet = (props) => {
   const history = useHistory();

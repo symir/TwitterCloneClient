@@ -15,10 +15,8 @@ import {
 import { Container, Col, Row, Card} from "react-bootstrap";
 
 import {
-  BrowserRouter as Router,
   Route,
-  BrowserRouter,
-  useHistory
+  BrowserRouter
 } from "react-router-dom";
 
 const App = () => {
@@ -181,34 +179,7 @@ const App = () => {
     handleCloseRetweet();
   }
 
-  const history = useHistory();
 
-  const handleFocusCardClick = (id) => 
-  {
-    history.push("/48")
-    // handleShowFocus(id);
-    console.log("Card click: "+id)
-  }
-
-  const handleFocusCardChildClick = (id, event) => {
-    event.stopPropagation();
-    console.log("Card click: "+id)
-    // handleShowFocus(id);
-  }
-
-/*
-  const handleShowFocus = (id) => {
-    setFocusId(id);
-    console.log("parent id: "+id);
-
-    setShowFocus(true);
-  }
-
-  const handleCloseFocus = () =>
-  {
-    setShowFocus(false);
-    setFocusId("");
-  }*/
 
   return (
     <BrowserRouter>
@@ -229,56 +200,56 @@ const App = () => {
           onSubmit={handleRetweetSubmit}
           id={stateReferenceId}
           />
-          <Container>
+          <Container fluid>
             <Row>
-              <Col md="auto">
+              <Col lg="auto">
                 <Menu />
               </Col>
               <Col md="auto">
                 <Row>
-                  <Post 
-                    onChange={handlePostChange}
-                    onSubmit={handlePostSubmit}
-                    users={stateUsers}
-                    activeUser={stateActiveUser}
-                  />
+                  <Col>
+                    <Post 
+                      onChange={handlePostChange}
+                      onSubmit={handlePostSubmit}
+                      users={stateUsers}
+                      activeUser={stateActiveUser}
+                    />
+                  </Col>
                 </Row>
                     <Route path="/" exact render={() => 
                       <>
                         {stateTweets && stateTweets.map((item) => (
-                          <Row key={item.tweetId} 
-                          style={{ marginTop: "1rem" }}>
-                            <Tweet 
-                              noChild={false}
-                              onLike={handleLike}
-                              onRetweet={handleShowRetweet}
-                              onShowReply={handleShowReply}
-                              onCardClick={handleFocusCardClick}
-                              onCardChildClick={handleFocusCardChildClick}
-                              id={item.tweetId}
-                              item={item}
-                            />
+                          <Row key={item.tweetId} style={{ marginTop: "1rem"}} >
+                            <Col>
+                              <Tweet 
+                                noChild={false}
+                                onLike={handleLike}
+                                onRetweet={handleShowRetweet}
+                                onShowReply={handleShowReply}
+                                id={item.tweetId}
+                                item={item}
+                              />
+                            </Col>
                           </Row>
                         ))}</>
                       }/>
                       <Route path={"/:tweetIdRoute"} render={(routeProps) => 
                       <>
-                      <Card style={{ marginTop: "2rem" }}>
+                      <Card style={{ marginTop: "2rem", marginLeft:"1rem", width:"24rem" }}>
                           {stateTweets.length > 0 && 
                           <Card.Title><Row 
                           key={parseInt(routeProps.match.params.tweetIdRoute)}
-                          style={{ marginTop: "-1rem" }}
                           >
-                            <Tweet 
-                              noChild={false}
-                              onLike={handleLike}
-                              onRetweet={handleShowRetweet}
-                              onShowReply={handleShowReply}
-                              onCardClick={handleFocusCardClick}
-                              onCardChildClick={handleFocusCardChildClick}
-                              id={parseInt(routeProps.match.params.tweetIdRoute)}
-                              item={stateTweets.find(tweet => tweet.tweetId === parseInt(routeProps.match.params.tweetIdRoute))}
-                            />
+                            <Col style={{ marginTop: "-1rem", marginLeft: "-1rem" }}>
+                              <Tweet 
+                                noChild={false}
+                                onLike={handleLike}
+                                onRetweet={handleShowRetweet}
+                                onShowReply={handleShowReply}
+                                id={parseInt(routeProps.match.params.tweetIdRoute)}
+                                item={stateTweets.find(tweet => tweet.tweetId === parseInt(routeProps.match.params.tweetIdRoute))}
+                              />
+                            </Col>
                           </Row>
                           </Card.Title>}
                           <Card.Body>
@@ -292,41 +263,27 @@ const App = () => {
                             </Card.Subtitle>
                             :<></>}
                             {stateTweets.length > 0 && stateTweets.filter(i=> i.replyId === parseInt(routeProps.match.params.tweetIdRoute)).map((item)=>(
-                              <Row key={item.tweetId} style={{ marginTop: "1rem" }}>
-                                <Tweet 
-                                  noChild={true}
-                                  refUser={stateTweets.find(tweet => tweet.tweetId === parseInt(routeProps.match.params.tweetIdRoute)).user}
-                                  onLike={handleLike}
-                                  onRetweet={handleShowRetweet}
-                                  onShowReply={handleShowReply}
-                                  onCardClick={handleFocusCardClick}
-                                  onCardChildClick={handleFocusCardChildClick}
-                                  id={item.tweetId}
-                                  item={item}
-                                />
+                              <Row key={item.tweetId} style={{ marginLeft: "-3rem",marginTop: "1rem" }}>
+                                <Col>
+                                  <Tweet 
+                                    noChild={true}
+                                    refUser={stateTweets.find(tweet => tweet.tweetId === parseInt(routeProps.match.params.tweetIdRoute)).user}
+                                    onLike={handleLike}
+                                    onRetweet={handleShowRetweet}
+                                    onShowReply={handleShowReply}
+                                    id={item.tweetId}
+                                    item={item}
+                                  />
+                                </Col>
                               </Row>
                           ))}
                           </Container>
                           </Card.Body>
                           </Card>
-                          {/* 
-                        {stateTweets && stateTweets.map((item) => (
-                          <Row key={item.tweetId}>
-                            <Tweet 
-                              noChild="true"
-                              onLike={handleLike}
-                              onRetweet={handleShowRetweet}
-                              onShowReply={handleShowReply}
-                              onCardClick={handleFocusCardClick}
-                              onCardChildClick={handleFocusCardChildClick}
-                              id={item.tweetId}
-                              item={item}
-                            />
-                          </Row>
-                        ))}*/}</>
+                          </>
                       }/>
                 </Col>
-              <Col md="auto">
+              <Col lg="auto">
                 <Search />
                 <Trends />
               </Col>
